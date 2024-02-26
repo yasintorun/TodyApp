@@ -8,7 +8,7 @@ const App = () => {
     <SafeAreaView style={styles.wrapper}>
       <TodyButton title='Contiune' size='md' />
 
-      <TodyButton title='Contiune' mode='elevated' />
+      <TodyButton onPress={() => console.log(" aksd jaskdj")} title='Contiune' mode='elevated' fullWidth />
       <TodyButton title='Contiune' mode='outlined' />
       <TodyButton title='Contiune' mode='text' />
 

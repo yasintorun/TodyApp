@@ -1,19 +1,25 @@
-import { StyleProp, StyleSheet, Text, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native'
+import { StyleProp, StyleSheet, Text, TextStyle, TouchableOpacity, TouchableOpacityProps, View, ViewStyle } from 'react-native'
 import React, { useState } from 'react'
 
 
 type Mode = "contained" | "outlined" | "elevated" | "text"
-type TodyButtonProps = React.PropsWithChildren<{
+type TodyButtonProps = React.PropsWithChildren<TouchableOpacityProps & {
     title?: string
     size?: 'sm' | 'md' | 'lg'
     mode?: Mode
+    fullWidth?: boolean
 }>
 
 const TodyButton = ({
     children,
     title,
     size = 'md',
-    mode = 'contained'
+    mode = 'contained',
+    style,
+    fullWidth = false,
+    onPressIn,
+    onPressOut,
+    ...rest
 }: TodyButtonProps) => {
     const [isHover, setIsHover] = useState(false)
     const sizes = {
@@ -89,13 +95,22 @@ const TodyButton = ({
             style={[
                 styles.touchable,
                 {
-                    paddingVertical: sizes[size]
+                    paddingVertical: sizes[size],
+                    width: fullWidth ? '100%' : 'auto',
                 },
                 modeStyles[mode].touchable || {},
-                isHover && modeStyles[mode].touchable?.hover || {}
+                isHover && modeStyles[mode].touchable?.hover || {},
+                style
             ]}
-            onPressIn={() => setIsHover(true)}
-            onPressOut={() => setIsHover(false)}
+            onPressIn={(...args) => {
+                setIsHover(true)
+                onPressIn?.(...args)
+            }}
+            onPressOut={(...args) => {
+                setIsHover(false)
+                onPressOut?.(...args)
+            }}
+            {...rest}
         >
             {children && !title ? children : (
                 <Text
